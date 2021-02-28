@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "91654513426",
+    "project_id": "senhadigital-1139b",
+    "storage_bucket": "senhadigital-1139b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91654513426:android:c62de09592398afe2c09cb",
+        "android_client_info": {
+          "package_name": "com.example.senhadigitalflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91654513426-262qsllam5vghj67l8ip0sun2ca3mq6p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.senhadigitalflutter",
+            "certificate_hash": "c258aa383ca8deccb108ad4d5aacb1b49125e92e"
+          }
+        },
+        {
+          "client_id": "91654513426-7pagf6l2t4oeld6j5h45hsfr3j3hamsj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFtD6-vu8bY5gIp-YdpLtOWzbEWAlUp70"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91654513426-7pagf6l2t4oeld6j5h45hsfr3j3hamsj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
