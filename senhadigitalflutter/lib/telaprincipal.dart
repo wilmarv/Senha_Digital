@@ -123,10 +123,14 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
                     Divider(),
                     Container(
                       width: 300,
-                      height: 39,
+                      height: 60,
                       padding: EdgeInsets.all(0),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        border: Border.all(
+                            color: Colors.white30,
+                            width: 8
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: RaisedButton(
                         child: Text("Entrar na Fila",style: TextStyle(color: Colors.black)),
