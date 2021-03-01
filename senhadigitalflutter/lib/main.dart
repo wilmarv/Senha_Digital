@@ -1,20 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:senhadigitalflutter/telalogin.dart';
+import 'package:senhadigitalflutter/telaprincipal.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Login(),
+    home: TelaPrincipal(),
     theme: ThemeData(
-        primaryColor: Colors.blue,
-        hintColor: Colors.white,
-        inputDecorationTheme: InputDecorationTheme(
-            enabledBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-            focusedBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        ),
+      primaryColor: Colors.blue,
+      hintColor: Colors.white,
+      inputDecorationTheme: InputDecorationTheme(
+        enabledBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+      ),
     ),
     debugShowCheckedModeBanner: false,
   ));
 }
+
+

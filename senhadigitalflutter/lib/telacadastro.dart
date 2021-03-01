@@ -1,21 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:senhadigitalflutter/appBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Cadastro extends StatelessWidget {
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController email = TextEditingController();
   TextEditingController senha = TextEditingController();
   TextEditingController nome = TextEditingController();
   TextEditingController matricula = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: appBar(),
+      appBar: AppBar(
+        title: Text("Senha Digital",
+            style: TextStyle(fontSize: 23, fontStyle: FontStyle.italic)),
+        centerTitle: true,
+        shadowColor: Colors.blue,
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -100,8 +103,10 @@ class Cadastro extends StatelessWidget {
                         }
                       },
                       child: Text(
-                        "Cadastrar", style: TextStyle(fontStyle: FontStyle
-                          .italic, fontSize: 16),),
+                        "Cadastrar",
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 16),
+                      ),
                     )
                   ],
                 ),
@@ -119,19 +124,24 @@ class Cadastro extends StatelessWidget {
           email: email.text, password: senha.text);
       Firestore.instance.collection("usuarios").document(email.text).setData({
         "nome": nome.text,
-        "matricula": matricula.text
+        "matricula": matricula.text,
+        "senha": senha.text
       });
-      Map<String,dynamic> usuario = {"email": email.text,"senha": senha.text};
-      Navigator.pop(context,usuario);
-    }catch(erro){
+      Map<String, dynamic> usuario = {"email": email.text, "senha": senha.text};
+      Navigator.pop(context, usuario);
+    } catch (erro) {
       return AlertDialog(
         title: Text("Algo de errado não esta Certo!"),
-        content:Text("Algo deu errado para seu cadastro, tenta mais tarde"),
+        content: Text("Algo deu errado para seu cadastro, tenta mais tarde"),
         actions: [
-          FlatButton(onPressed: (){Navigator.pop(context);Navigator.pop(context);}, child: Text("Tentarei mais tarde!")),
+          FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Text("Tentarei mais tarde!")),
         ],
       );
     }
   }
 }
-
