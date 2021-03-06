@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:senhadigitalflutter/telaprincipal.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:senhadigitalflutter/model/usuario_model.dart';
+import 'package:senhadigitalflutter/telas/tela_login.dart';
+void main() async{
+  runApp(MyApp());
+}
 
-void main() {
-  runApp(MaterialApp(
-    home: TelaPrincipal(),
-    theme: ThemeData(
-      primaryColor: Colors.blue,
-      hintColor: Colors.white,
-      inputDecorationTheme: InputDecorationTheme(
-        enabledBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        focusedBorder:
-            OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-      ),
-    ),
-    debugShowCheckedModeBanner: false,
-  ));
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModel<Usuario>(
+        model: Usuario(),
+        child: MaterialApp(
+          home: TelaLogin(),
+          theme: ThemeData(
+            primaryColor: Colors.blue,
+            hintColor: Colors.white,
+            inputDecorationTheme: InputDecorationTheme(
+              enabledBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+              focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+            ),
+          ),
+          debugShowCheckedModeBanner: false,
+        ),
+    );
+  }
 }
 
 
