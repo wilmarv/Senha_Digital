@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:senhadigitalflutter/model/usuario_model.dart';
+import 'package:senhadigitalflutter/telas/tela_admfila.dart';
 import 'package:senhadigitalflutter/telas/tela_login.dart';
 void main() async{
   runApp(MyApp());
@@ -9,7 +10,8 @@ void main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<Usuario>(
+    return Center(
+      child: ScopedModel<Usuario>(
         model: Usuario(),
         child: MaterialApp(
           home: TelaLogin(),
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
         ),
+      ),
     );
   }
 }

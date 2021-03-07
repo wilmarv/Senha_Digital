@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:senhadigitalflutter/model/usuario_model.dart';
+import 'package:senhadigitalflutter/telas/tela_admfila.dart';
 import 'package:senhadigitalflutter/telas/tela_cadastro.dart';
 import 'package:senhadigitalflutter/telas/tela_gerarsenha.dart';
 import 'package:senhadigitalflutter/telas/widget/appbar.dart';
@@ -115,7 +116,8 @@ class _TelaLoginState extends State<TelaLogin> {
         ));
   }
   void _onSuccess() {
-    Usuario.of(context).adm ? Container() :
+    Usuario.of(context).adm ? Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context)=>AdmFila())) :
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context)=>GerarSenha())
     );
