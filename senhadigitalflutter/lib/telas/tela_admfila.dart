@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:senhadigitalflutter/model/usuario_fila_model.dart';
 import 'package:senhadigitalflutter/telas/widget/appbar.dart';
 import 'package:senhadigitalflutter/telas/widget/lista_fila.dart';
 
@@ -22,7 +21,9 @@ class _AdmFilaState extends State<AdmFila> {
             width: 400,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
-                color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                color: Colors.blue,
+                border: Border.all(width: 1.5,style: BorderStyle.solid),
+                borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: [
                 Expanded(
@@ -30,7 +31,7 @@ class _AdmFilaState extends State<AdmFila> {
                     padding: EdgeInsets.only(top: 4),
                     decoration: BoxDecoration(
                         color: Colors.white60,
-                        border: Border.all(width: 1),
+                        border: Border.all(width: 1.5,style: BorderStyle.solid),
                         borderRadius: BorderRadius.circular(20)),
                     child: Column(
                       children: [

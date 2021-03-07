@@ -21,66 +21,75 @@ class Usuario extends Model {
   }) {
     isloadin = true;
     notifyListeners();
-    _auth.createUserWithEmailAndPassword(
-        email: usuarioData["email"], password: senha)
-        .then((user) async{
+    _auth
+        .createUserWithEmailAndPassword(
+            email: usuarioData["email"], password: senha)
+        .then((user) async {
       this._usuario = user.user;
-
 
       onSuccess();
 
       await _saveUsuarioData(usuarioData);
       isloadin = false;
       notifyListeners();
-
-    }).catchError((e){
+    }).catchError((e) {
       onFail();
       isloadin = false;
       notifyListeners();
     });
   }
 
-  void Login({
-  @required String email,
-    @required String pass,
-    @required VoidCallback onSuccess,
-    @required VoidCallback onFail
-}){
+  void Login(
+      {@required String email,
+      @required String pass,
+      @required VoidCallback onSuccess,
+      @required VoidCallback onFail}) {
     isloadin = true;
     notifyListeners();
-    _auth.signInWithEmailAndPassword(email: email, password: pass).then((user)async{
-
+    _auth
+        .signInWithEmailAndPassword(email: email, password: pass)
+        .then((user) async {
       this._usuario = user.user;
-
-     await _carregarUsuario();
-     isloadin = false;
-     onSuccess();
-    }).catchError((e){
+      await _carregarUsuario();
+      onSuccess();
+      isloadin = false;
+    }).catchError((e) {
       onFail();
       isloadin = false;
       notifyListeners();
     });
-
-
   }
-Future _carregarUsuario()async{
-    if(_usuario==null)_usuario = await _auth.currentUser();
-    if(_usuario!=null){
-      if(_usuarioData["nome"]== null){
+
+  void Desconect()async{
+    await _auth.signOut();
+    _usuarioData = Map();
+    _usuario = null;
+    notifyListeners();
+  }
+
+
+  Future _carregarUsuario() async {
+    if (_usuario == null) _usuario = await _auth.currentUser();
+    if (_usuario != null) {
+      if (_usuarioData["nome"] == null) {
         DocumentSnapshot docusuario = await Firestore.instance
             .collection("usuarios")
-            .document(_usuario.email).get();
+            .document(_usuario.email)
+            .get();
         _usuarioData = docusuario.data;
         adm = _usuarioData["adm"];
       }
     }
-}
-
-
-  Future _saveUsuarioData(Map<String,dynamic>usuarioData)async{
-    this._usuarioData = usuarioData;
-    await Firestore.instance.collection("usuarios").document(usuarioData["email"]).setData(usuarioData);
+  }
+  bool conectado(){
+    return _usuario!=null;
   }
 
+  Future _saveUsuarioData(Map<String, dynamic> usuarioData) async {
+    this._usuarioData = usuarioData;
+    await Firestore.instance
+        .collection("usuarios")
+        .document(usuarioData["email"])
+        .setData(usuarioData);
+  }
 }
-
