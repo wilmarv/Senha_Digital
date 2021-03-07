@@ -5,7 +5,7 @@ import 'package:senhadigitalflutter/model/usuario_fila_model.dart';
 
 Widget ListaFila(List<DocumentSnapshot> snapshot) {
   return Container(
-    padding: EdgeInsets.only(left: 1,right: 1),
+    padding: EdgeInsets.only(left: 1, right: 1),
     child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
@@ -17,10 +17,7 @@ Widget ListaFila(List<DocumentSnapshot> snapshot) {
           Color cor = index % 2 == 0 ? Colors.grey : Colors.white60;
           UsuarioFila fila = UsuarioFila.fromDocuments(snapshot[index]);
           return Container(
-            decoration: BoxDecoration(
-              color: cor,
-              border: Border.all(width: 1)
-            ),
+            decoration: BoxDecoration(color: cor, border: Border.all(width: 1)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

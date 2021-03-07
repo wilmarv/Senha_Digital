@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:senhadigitalflutter/model/usuario_model.dart';
 import 'package:senhadigitalflutter/telas/tela_statusfila.dart';
 import 'package:senhadigitalflutter/telas/widget/appbar.dart';
 
@@ -74,7 +75,17 @@ class _GerarSenhaState extends State<GerarSenha> {
                           child: RaisedButton(
                               child: Text("Entrar na Fila",
                                   style: TextStyle(color: Colors.black)),
-                              onPressed: () {
+                              onPressed: ()async {
+                                QuerySnapshot doc = await Firestore.instance
+                                    .collection("senha").getDocuments();
+                                int senha = doc.documents.length + 1;
+                                Usuario.of(context).senha = senha;
+                                Firestore.instance.collection("senha").document().setData({});
+                                Firestore.instance.collection("fila").document().setData({
+                                  "nome": Usuario.of(context).nomeUsuario(),
+                                  "matricula": Usuario.of(context).matriculaUsuario(),
+                                  "senha": senha
+                                });
                                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=> StatusFila()));
                               }),
                         )

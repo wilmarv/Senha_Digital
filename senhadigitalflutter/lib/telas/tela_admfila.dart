@@ -9,9 +9,11 @@ class AdmFila extends StatefulWidget {
 }
 
 class _AdmFilaState extends State<AdmFila> {
+  final _scaffold = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key:_scaffold ,
       appBar: AppBarPadrao(),
       backgroundColor: Colors.white,
       body: Center(
@@ -22,7 +24,7 @@ class _AdmFilaState extends State<AdmFila> {
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: Colors.blue,
-                border: Border.all(width: 1.5,style: BorderStyle.solid),
+                border: Border.all(width: 1.5, style: BorderStyle.solid),
                 borderRadius: BorderRadius.circular(10)),
             child: Column(
               children: [
@@ -31,7 +33,8 @@ class _AdmFilaState extends State<AdmFila> {
                     padding: EdgeInsets.only(top: 4),
                     decoration: BoxDecoration(
                         color: Colors.white60,
-                        border: Border.all(width: 1.5,style: BorderStyle.solid),
+                        border:
+                            Border.all(width: 1.5, style: BorderStyle.solid),
                         borderRadius: BorderRadius.circular(20)),
                     child: Column(
                       children: [
@@ -42,18 +45,27 @@ class _AdmFilaState extends State<AdmFila> {
                             children: [
                               Container(
                                 width: 89,
-                                child: Text("Senha", style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center,),
+                                child: Text(
+                                  "Senha",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                               Container(
                                 width: 89,
-                                child: Text("Nome", style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center,),
+                                child: Text(
+                                  "Nome",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                               Container(
                                 width: 89,
-                                child: Text("Matricula", style: TextStyle(fontSize: 20),
-                                  textAlign: TextAlign.center,),
+                                child: Text(
+                                  "Matricula",
+                                  style: TextStyle(fontSize: 20),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ],
                           ),
@@ -71,10 +83,25 @@ class _AdmFilaState extends State<AdmFila> {
                       padding: EdgeInsets.all(0),
                       width: 85,
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          QuerySnapshot doc = await Firestore.instance
+                              .collection("fila")
+                              .orderBy("senha")
+                              .getDocuments();
+                          if(doc.documents.length <= 2){
+                            _scaffold.currentState.showSnackBar(
+                                SnackBar(content: Text("Fim da fila no momento!"))
+                            );
+                          }else {
+                            await Firestore.instance
+                                .collection("fila")
+                                .document(doc.documents[0].documentID)
+                                .delete();
+                          }
+                        },
                         child: Text("Proximo"),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],

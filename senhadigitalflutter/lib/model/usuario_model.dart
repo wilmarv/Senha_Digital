@@ -10,6 +10,8 @@ class Usuario extends Model {
 
   bool isloadin = false;
   bool adm = false;
+  int guiche;
+  int senha;
 
   static Usuario of(BuildContext context) => ScopedModel.of<Usuario>(context);
 
@@ -37,6 +39,13 @@ class Usuario extends Model {
       isloadin = false;
       notifyListeners();
     });
+  }
+  Future _saveUsuarioData(Map<String, dynamic> usuarioData) async {
+    this._usuarioData = usuarioData;
+    await Firestore.instance
+        .collection("usuarios")
+        .document(usuarioData["email"])
+        .setData(usuarioData);
   }
 
   void Login(
@@ -85,11 +94,11 @@ class Usuario extends Model {
     return _usuario!=null;
   }
 
-  Future _saveUsuarioData(Map<String, dynamic> usuarioData) async {
-    this._usuarioData = usuarioData;
-    await Firestore.instance
-        .collection("usuarios")
-        .document(usuarioData["email"])
-        .setData(usuarioData);
+  String nomeUsuario(){
+    return _usuarioData["nome"];
   }
+  String matriculaUsuario(){
+    return _usuarioData["matricula"];
+  }
+
 }
