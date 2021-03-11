@@ -10,13 +10,16 @@ class GerarSenha extends StatefulWidget {
 }
 
 class _GerarSenhaState extends State<GerarSenha> {
+  final _scaffold = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffold,
       appBar: AppBarPadrao(),
       backgroundColor: Colors.white,
       body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance.collection("fila").snapshots(),
+        stream: Firestore.instance.collection("fila").orderBy("pos").snapshots(),
         // ignore: missing_return
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
@@ -27,8 +30,8 @@ class _GerarSenhaState extends State<GerarSenha> {
               );
             default:
               List<DocumentSnapshot> document =
-                  snapshot.data.documents.toList();
-              int _tamanhofila = document.length;
+                  snapshot.data.documents;
+              int _tamanhofila = document.length-1;
               return Padding(
                   padding: EdgeInsets.all(20),
                   child: Container(
@@ -73,28 +76,50 @@ class _GerarSenhaState extends State<GerarSenha> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: RaisedButton(
+
                               child: Text("Entrar na Fila",
                                   style: TextStyle(color: Colors.black)),
-                              onPressed: ()async {
-                                QuerySnapshot doc = await Firestore.instance
-                                    .collection("senha").getDocuments();
-                                int senha = doc.documents.length + 1;
-                                Usuario.of(context).senha = senha;
-                                Firestore.instance.collection("senha").document().setData({});
-                                Firestore.instance.collection("fila").document().setData({
-                                  "nome": Usuario.of(context).nomeUsuario(),
-                                  "matricula": Usuario.of(context).matriculaUsuario(),
-                                  "senha": senha
-                                });
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=> StatusFila()));
-                              }),
+                              onPressed:
+                                     !snapshot.data.documents[0].data["aberto"] ? null
+                                      : () {
+                                Firestore.instance.collection("fila").document("placar").updateData({
+                                  "senha": snapshot.data.documents[0].data["senha"]+1,
+                                }).then((value){
+                                  Usuario.of(context).senha = snapshot.data.documents[0].data["senha"];
+                                  Firestore.instance.collection("fila").document().setData({
+                                    "pos": Usuario.of(context).senha,
+                                    "senha": Usuario.of(context).senha,
+                                    "matricula": Usuario.of(context).Dados()["matricula"],
+                                    "nome": Usuario.of(context).Dados()["nome"],
+                                  }).then((value) => Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => StatusFila())
+                                  ));
+                                } );
+                                  }),
                         )
                       ],
                     ),
-                  ));
+                  )) ;
           }
         },
       ),
     );
   }
+  Future Status(){
+    return showDialog(context: context,
+      builder: (context){
+      return AlertDialog(
+        title: Text("Sem guinche!"),
+        content: Text("Nenhum guinche aberto para atender!"),
+        actions: [
+          FlatButton(onPressed: (){Navigator.pop(context);}, child: Text("ok"))
+        ],
+      );
+      }
+    );
+  }
 }
+
+
+/*
+Navigator.of(context).push(MaterialPageRoute(builder: (context)=> StatusFila()));*/

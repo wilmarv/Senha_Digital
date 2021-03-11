@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:senhadigitalflutter/model/usuario_model.dart';
 import 'package:senhadigitalflutter/telas/tela_abrirfila.dart';
-import 'package:senhadigitalflutter/telas/tela_admfila.dart';
 import 'package:senhadigitalflutter/telas/tela_cadastro.dart';
 import 'package:senhadigitalflutter/telas/tela_gerarsenha.dart';
 import 'package:senhadigitalflutter/telas/widget/appbar.dart';
@@ -24,7 +22,7 @@ class _TelaLoginState extends State<TelaLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffold,
+        key: _scaffold,
         appBar: AppBarPadrao(),
         backgroundColor: Colors.white,
         body: ScopedModelDescendant<Usuario>(
@@ -78,16 +76,18 @@ class _TelaLoginState extends State<TelaLogin> {
                                     color: Colors.white60,
                                     onPressed: () {
                                       if (_formkey.currentState.validate()) {
-                                        model.Login(email: _emailController.text,
+                                        model.Login(
+                                            email: _emailController.text,
                                             pass: _senhaController.text,
                                             onSuccess: _onSuccess,
-                                            onFail: _onFail
-                                        );
+                                            onFail: _onFail);
                                       }
                                     }),
                               ),
                               Divider(),
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(5),
@@ -99,12 +99,43 @@ class _TelaLoginState extends State<TelaLogin> {
                                               fontSize: 15),
                                         ),
                                         onPressed: () async {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Cadastro()));
+                                          Map<String, dynamic> usuarioData =
+                                              await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Cadastro()));
+                                          if (usuarioData != null)
+                                            model.Login(
+                                                email: usuarioData["email"],
+                                                pass: usuarioData["senha"],
+                                                onSuccess: _onSuccess,
+                                                onFail: _onFail);
                                         }),
+                                  ),
+                                  GestureDetector(
+                                    child: Text(
+                                      "Esqueceu sua senha?",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    onTap: () {
+                                      if (_emailController.text.isNotEmpty) {
+                                        Usuario.of(context).MudarSenha(
+                                            _emailController.text,
+                                            _onSuccessReset,
+                                            _onFailReset);
+                                      } else
+                                        _scaffold.currentState.showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                "Ensira seu e-mail no campo para recupera sua senha"),
+                                            backgroundColor: Colors.redAccent,
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                    },
                                   )
                                 ],
                               )
@@ -116,19 +147,36 @@ class _TelaLoginState extends State<TelaLogin> {
           },
         ));
   }
+
   void _onSuccess() {
-    Usuario.of(context).adm ? Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context)=>AbrirFila())) :
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context)=>GerarSenha())
-    );
-  }
-  void _onFail() {
-    _scaffold.currentState.showSnackBar(
-        SnackBar(content: Text("Falha ao Conectar!"),
-          backgroundColor: Colors.redAccent,
-          duration: Duration(seconds: 2),)
-    );
+    Usuario.of(context).adm
+        ? Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => AbrirFila()))
+        : Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => GerarSenha()));
   }
 
+  void _onFail() {
+    _scaffold.currentState.showSnackBar(SnackBar(
+      content: Text("Falha ao Conectar!"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
+  }
+
+  void _onSuccessReset() {
+    _scaffold.currentState.showSnackBar(SnackBar(
+      content: Text("Verifique seu E-mail!"),
+      backgroundColor: Colors.blueAccent,
+      duration: Duration(seconds: 2),
+    ));
+  }
+
+  void _onFailReset() {
+    _scaffold.currentState.showSnackBar(SnackBar(
+      content: Text("Falha ao resetar senha!"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
+  }
 }

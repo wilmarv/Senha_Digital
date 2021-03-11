@@ -103,13 +103,16 @@ class _CadastroState extends State<Cadastro> {
   }
 
   void _onSuccess() {
+    Map<String, dynamic> usuarioData = {
+      "email": _emailController.text,
+      "senha": _senhaController.text,
+    };
     _scaffold.currentState.showSnackBar(SnackBar(
       content: Text("Usuario criado com sucesso!"),
       backgroundColor: Colors.blue,
       duration: Duration(seconds: 2),
     ));
-    Future.delayed(Duration(seconds: 2))
-        .then((value) => Navigator.of(context).pop());
+    Future.delayed(Duration(seconds: 2)).then((value) => Navigator.of(context).pop(usuarioData));
   }
 
   void _onFail() {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:senhadigitalflutter/model/usuario_model.dart';
 import 'package:senhadigitalflutter/telas/widget/appbar.dart';
 import 'package:senhadigitalflutter/telas/widget/lista_fila.dart';
 
@@ -84,20 +85,22 @@ class _AdmFilaState extends State<AdmFila> {
                       width: 85,
                       child: RaisedButton(
                         onPressed: () async {
-                          QuerySnapshot doc = await Firestore.instance
+                          Firestore.instance
                               .collection("fila")
-                              .orderBy("senha")
-                              .getDocuments();
-                          if(doc.documents.length <= 2){
-                            _scaffold.currentState.showSnackBar(
-                                SnackBar(content: Text("Fim da fila no momento!"))
-                            );
-                          }else {
-                            await Firestore.instance
+                              .orderBy("pos")
+                              .getDocuments().then((value) {
+                                Firestore.instance.collection("fila").document("placar").updateData({
+                                  "antsenha": value.documents[0].data["atual"] ,
+                                  "antguinche": value.documents[0].data["guinche"],
+                                  "guinche": Usuario.of(context).guiche,
+                                  "atual": value.documents[1].data["senha"],
+                                });
+                            Firestore.instance
                                 .collection("fila")
-                                .document(doc.documents[0].documentID)
+                                .document(value.documents[1].documentID)
                                 .delete();
-                          }
+                          });
+
                         },
                         child: Text("Proximo"),
                       ),
@@ -115,7 +118,7 @@ class _AdmFilaState extends State<AdmFila> {
 
 Widget Lista() {
   return StreamBuilder<QuerySnapshot>(
-    stream: Firestore.instance.collection("fila").orderBy("senha").snapshots(),
+    stream: Firestore.instance.collection("fila").orderBy("pos").snapshots(),
     builder: (context, snapshot) {
       switch (snapshot.connectionState) {
         case ConnectionState.waiting:
@@ -123,7 +126,7 @@ Widget Lista() {
           return Center(child: CircularProgressIndicator());
         default:
           List<DocumentSnapshot> doc = snapshot.data.documents;
-          return ListaFila(doc);
+          return doc.length>1 ? ListaFila(doc) : Container();
       }
     },
   );

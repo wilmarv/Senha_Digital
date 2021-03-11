@@ -28,7 +28,7 @@ class AbrirFila extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Olá, ${Usuario.of(context).nomeUsuario()}",style: TextStyle(fontSize: 25,color: Colors.white),),
+                    Text("Olá, ${Usuario.of(context).Dados()["nome"]}",style: TextStyle(fontSize: 25,color: Colors.white),),
                     Text("Escolha seu guiche para abrir a fila:",style: TextStyle(fontSize: 25,color: Colors.white),),
                     Divider(color: Colors.transparent),
                     Form(
@@ -49,7 +49,7 @@ class AbrirFila extends StatelessWidget {
                               style: TextStyle(color: Colors.black)),
                           onPressed: () {
                             if(_globalkey.currentState.validate()) {
-                              Firestore.instance.collection("aberto").document(Usuario.of(context).nomeUsuario()).setData({});
+                              Firestore.instance.collection("aberto").document(Usuario.of(context).Dados()["nome"]).setData({});
                               Usuario.of(context).guiche = int.parse(_caixaController.text);
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(

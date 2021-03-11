@@ -15,6 +15,21 @@ class Usuario extends Model {
 
   static Usuario of(BuildContext context) => ScopedModel.of<Usuario>(context);
 
+  void MudarSenha(String email, VoidCallback onSuccess, VoidCallback onFail) {
+    isloadin = true;
+    notifyListeners();
+
+    _auth.sendPasswordResetEmail(email: email).then((value) {
+      onSuccess();
+      isloadin = false;
+      notifyListeners();
+    }).catchError((e) {
+      onFail();
+      isloadin = false;
+      notifyListeners();
+    });
+  }
+
   void Cadastrar({
     @required Map<String, dynamic> usuarioData,
     @required String senha,
@@ -40,12 +55,17 @@ class Usuario extends Model {
       notifyListeners();
     });
   }
+
   Future _saveUsuarioData(Map<String, dynamic> usuarioData) async {
     this._usuarioData = usuarioData;
     await Firestore.instance
         .collection("usuarios")
         .document(usuarioData["email"])
         .setData(usuarioData);
+  }
+
+  Map<String, dynamic> Dados() {
+    return _usuarioData;
   }
 
   void Login(
@@ -63,19 +83,20 @@ class Usuario extends Model {
       onSuccess();
       isloadin = false;
     }).catchError((e) {
+      print(e);
       onFail();
       isloadin = false;
       notifyListeners();
     });
   }
 
-  void Desconect()async{
+  void Desconect() async {
     await _auth.signOut();
     _usuarioData = Map();
     _usuario = null;
+    adm = false;
     notifyListeners();
   }
-
 
   Future _carregarUsuario() async {
     if (_usuario == null) _usuario = await _auth.currentUser();
@@ -90,15 +111,8 @@ class Usuario extends Model {
       }
     }
   }
-  bool conectado(){
-    return _usuario!=null;
-  }
 
-  String nomeUsuario(){
-    return _usuarioData["nome"];
+  bool conectado() {
+    return _usuario != null;
   }
-  String matriculaUsuario(){
-    return _usuarioData["matricula"];
-  }
-
 }
